@@ -33,17 +33,19 @@ def format_name(data):
 
 def join_duplicate(data):
     dict_ = {}   
+    new_contacts_list = []
     for x in data:
         if x[0] not in dict_.keys():
             dict_[x[0]] = x[1:]
         else:
             for j, element in enumerate(dict_[x[0]]):
-                # print(j)
-                # print(element)
                 if element == "" and x[1:][j] != "":
                     dict_[x[0]][j] = x[1:][j]
-    return dict_
-
+    
+    for x in dict_.items():
+        x[1].insert(0, x[0])
+        new_contacts_list.append(x[1])
+    return new_contacts_list
 
 def write_file(data):
     with open("phone_book.csv", "w", encoding='utf-8') as file:
@@ -52,14 +54,13 @@ def write_file(data):
 
 
 if __name__ == '__main__':
-    contacts = read_file('phonebook_raw.csv')
-    x = format_number(contacts)
+    phonebook = read_file('phonebook_raw.csv')
+    x = format_number(phonebook)
     contacts = format_name(x)
     # contacts = delete_space(contacts)
     # print(contacts)
     contacts = join_duplicate(contacts)
     # print(contacts)
-    for x in contacts.items():
-        print(x)
+    
     # contacts[0][2] = 'patronymic'
-    # write_file(contacts)
+    write_file(contacts)
