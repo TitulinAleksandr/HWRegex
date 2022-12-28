@@ -4,7 +4,6 @@ import csv
 
 class Phbook:
     
-        
     def read_file(self, file_name):
         self.file_name = file_name
         with open(self.file_name, encoding="utf-8") as file:
@@ -14,32 +13,35 @@ class Phbook:
 
     def format_number(self, data):
         self.data = data
+        self.new_contacts_list = []
         number_search = r'(\+7|8)\s*\(*(\d{3})\)*[\s|-]*(\d{3})[-]*(\d{2})[-]*(\d{2})((\s*)\(*(доб.)\s*(\d{4})\)*)?'
         number_new_format = r'+7(\2)\3-\4-\5\7\8\9'
-        new_contacts_list = []
+        
         for text in data:
             text_search = ','.join(text)
             format_text = re.sub(number_search, number_new_format, text_search)
             format_list = format_text.split(',')
-            new_contacts_list.append(format_list)
-        return new_contacts_list
+            self.new_contacts_list.append(format_list)
+        return self.new_contacts_list
 
     def format_name(self, data):
         self.data = data
+        self.new_contacts_list = []
         name_search = r'(^[А-ё]+)(\s*)(\,?)([А-ё]+)(\s*)(\,?)([А-ё]+)?(\,?)(\,?)(\,?)'
         name_new_format = r'\1,\4\6\9\7\8'
-        new_contacts_list = []
+        
         for text in data:
             text_search = ','.join(text)
             format_text = re.sub(name_search, name_new_format, text_search)
             format_list = format_text.split(',')
-            new_contacts_list.append(format_list)
-        return new_contacts_list
+            self.new_contacts_list.append(format_list)
+        return self.new_contacts_list
 
     def join_duplicate(self, data):
         self.data = data
         self.dict_ = {}   
         self.new_contacts_list = []
+       
         for x in data:
             if x[0] not in self.dict_.keys():
                 self.dict_[x[0]] = x[1:]
